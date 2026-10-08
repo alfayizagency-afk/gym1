@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جدول التمارين الرياضية - PPL Split</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 15px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 6px;
+      border: none;
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-weight: bold;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .day-content {
+      display: none;
+    }
+
+    .day-content.active {
+      display: block;
+    }
+
+    .exercise-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .exercise-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .exercise-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--text);
+    }
+
+    .target-badge {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      margin: 12px 0;
+      background: #000;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .counter-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .counter-display {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .counter-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:active {
+      opacity: 0.8;
+    }
+
+    .btn-add { background: var(--success); color: white; }
+    .btn-sub { background: var(--danger); color: white; }
+    .btn-reset { background: var(--border); color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>جدول التمارين الأسبوعي</h1>
+      <p class="subtitle">تمارين الأجهزة والكيبل - PPL Split</p>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchDay(event, 'sat')">السبت<br><small>دفع + بطن</small></button>
+      <button class="tab-btn" onclick="switchDay(event, 'mon')">الاثنين<br><small>أرجل + كور</small></button>
+      <button class="tab-btn" onclick="switchDay(event, 'wed')">الأربعاء<br><small>سحب + بطات</small></button>
+    </div>
+
+    <!-- يوم السبت -->
+    <div id="sat" class="day-content active">
+
+      <!-- تمرين 1 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">1. ضغط صدر علوي بالجهاز</div>
+          <div class="target-badge">3 جولات × 10 - 12</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/bbbiEEAEsP8" title="Incline Chest Press Machine" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="sat1">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('sat1', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('sat1', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('sat1')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 2 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">2. ضغط صدر مستوٍ بالجهاز</div>
+          <div class="target-badge">3 جولات × 10 - 12</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/4atMPiP_eaY" title="Seated Chest Press Machine" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="sat2">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('sat2', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('sat2', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('sat2')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 3 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">3. ضغط أكتاف بالجهاز</div>
+          <div class="target-badge">3 جولات × 10 - 12</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/JgtQkKOetaY" title="Seated Shoulder Press Machine" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="sat3">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('sat3', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('sat3', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('sat3')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 4 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">4. رفرفة أكتاف جانبي بالكيبل</div>
+          <div class="target-badge">3 جولات × 12 - 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/lMJUXEvcMkQ" title="Cable Lateral Raise" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="sat4">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('sat4', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('sat4', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('sat4')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 5 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">5. ترايسبس بالكيبل</div>
+          <div class="target-badge">3 جولات × 12 - 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/6Dh8sD6aNQE" title="Cable Triceps Pushdown" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="sat5">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('sat5', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('sat5', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('sat5')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 6 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">6. طحن بطن بالجهاز</div>
+          <div class="target-badge">3 جولات × 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/f0tJV1k5BNs" title="Machine Abdominal Crunch" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="sat6">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('sat6', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('sat6', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('sat6')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- يوم الاثنين -->
+    <div id="mon" class="day-content">
+
+      <!-- تمرين 1 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">1. ضغط أرجل بالجهاز</div>
+          <div class="target-badge">3 جولات × 10 - 12</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/EotSw18oR9w" title="Leg Press Machine" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="mon1">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('mon1', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('mon1', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('mon1')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 2 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">2. دفع الحوض / الجسر على الأرض (Glute Bridge)</div>
+          <div class="target-badge">3 جولات × 12 - 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/S9yHOjPSrUE" title="Glute Bridge / Hip Thrust Alternative" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="mon2">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('mon2', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('mon2', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('mon2')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 3 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">3. تمرين فخذ خلفي بالجهاز</div>
+          <div class="target-badge">3 جولات × 12 - 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/_lgE0gPvbik" title="Leg Curl Machine" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="mon3">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('mon3', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('mon3', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('mon3')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 4 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">4. تمرين فخذ أمامي بالجهاز</div>
+          <div class="target-badge">3 جولات × 12 - 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/uM86QE59Tgc" title="Leg Extension Machine" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="mon4">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('mon4', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('mon4', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('mon4')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 5 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">5. رفع الركبتين مستلقياً على الأرض</div>
+          <div class="target-badge">3 جولات × 12 - 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/aK8Rm_tv3WM" title="Lying Leg / Knee Raise" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="mon5">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('mon5', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('mon5', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('mon5')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 6 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">6. ثبات بلانك</div>
+          <div class="target-badge">3 جولات × 30 - 45 ثانية</div>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="mon6">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('mon6', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('mon6', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('mon6')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- يوم الأربعاء -->
+    <div id="wed" class="day-content">
+
+      <!-- تمرين 1 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">1. سحب ظهري واسع للجهاز/الكيبل</div>
+          <div class="target-badge">3 جولات × 10 - 12</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/bNmvKpJSWKM" title="Lat Pulldown Machine" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="wed1">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('wed1', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('wed1', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('wed1')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 2 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">2. سحب أفقي بالكيبل أو الجهاز</div>
+          <div class="target-badge">3 جولات × 10 - 12</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/qD1WZ5pSuvk" title="Seated Cable Row" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="wed2">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('wed2', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('wed2', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('wed2')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 3 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">3. رفرفة أكتاف خلفي بالجهاز</div>
+          <div class="target-badge">3 جولات × 12 - 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/7tgx6QHB0-A" title="Reverse Pec Deck Machine" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="wed3">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('wed3', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('wed3', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('wed3')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 4 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">4. بايسبس بالكيبل</div>
+          <div class="target-badge">3 جولات × 12 - 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/CrbTqNOlFgE" title="Cable Bicep Curls" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="wed4">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('wed4', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('wed4', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('wed4')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين 5 -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-title">5. بطات واقفاً/جالساً على الجهاز</div>
+          <div class="target-badge">3 جولات × 15</div>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/ArhbcO-TPKM" title="Calf Raise Machine" allowfullscreen></iframe>
+        </div>
+        <div class="counter-section">
+          <div class="counter-display">الجولات المكتملة: <span id="wed5">0</span> / 3</div>
+          <div class="counter-controls">
+            <button class="btn btn-add" onclick="updateCounter('wed5', 1, 3)">+</button>
+            <button class="btn btn-sub" onclick="updateCounter('wed5', -1, 3)">-</button>
+            <button class="btn btn-reset" onclick="resetCounter('wed5')">تصفير</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function switchDay(event, dayId) {
+      document.querySelectorAll('.day-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(dayId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    function updateCounter(id, delta, max) {
+      const el = document.getElementById(id);
+      let val = parseInt(el.innerText) + delta;
+      if (val < 0) val = 0;
+      if (val > max) val = max;
+      el.innerText = val;
+      localStorage.setItem('workout_' + id, val);
+    }
+
+    function resetCounter(id) {
+      const el = document.getElementById(id);
+      el.innerText = 0;
+      localStorage.setItem('workout_' + id, 0);
+    }
+
+    window.onload = function() {
+      const ids = [
+        'sat1', 'sat2', 'sat3', 'sat4', 'sat5', 'sat6',
+        'mon1', 'mon2', 'mon3', 'mon4', 'mon5', 'mon6',
+        'wed1', 'wed2', 'wed3', 'wed4', 'wed5'
+      ];
+      
+      ids.forEach(id => {
+        const saved = localStorage.getItem('workout_' + id);
+        const el = document.getElementById(id);
+        if (saved !== null && el) {
+          el.innerText = saved;
+        }
+      });
+    };
+  </script>
+</body>
+</html>
